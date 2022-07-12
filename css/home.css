@@ -1,0 +1,32 @@
+#content{
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr;
+}
+.category{
+    margin-top: 20px;
+}
+.category div{
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    text-align: left;
+    margin: 10px 0;
+}
+.category div span{
+   margin-left: 20px;
+}
+.category div input{
+    border-radius: -50px;
+ }
+
+ .product{
+     margin-top: 20px;
+ }
+
+ .product_card{
+     display: inline-block;
+     margin: 5px 5px;
+ }
+ .product_card img{
+     width: 286px;
+     height: 286px;
+ }

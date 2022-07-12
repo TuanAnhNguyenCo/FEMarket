@@ -1,0 +1,12 @@
+#content{
+    display: grid;
+    grid-template-columns: 3fr 8fr 1fr;
+}
+.category{
+    background-color: aqua;
+    display: inline-block;
+}
+.category_style_div{
+    margin-left: 20px;
+    margin-top: 30px;
+}
