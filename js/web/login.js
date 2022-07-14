@@ -15,7 +15,7 @@ $(document).ready(function() {
         },
         success: function (data) {
           window.localStorage.setItem('token', data['jwt'])
-          window.location.replace("http://127.0.0.1:8088/web/home.html");
+          window.location.replace("http://127.0.0.1:8088/market/home.html");
       },
       error: function (e) {
          alert("Error")
