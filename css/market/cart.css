@@ -1,0 +1,43 @@
+.product_card{
+    display: inline-block;
+    margin: 5px 5px;
+}
+.product_card img{
+    width: 286px;
+    height: 286px;
+}
+
+#cart
+{
+    position: fixed;
+    text-align: center;
+    bottom: 20%;
+    cursor: pointer;
+    
+    
+}
+#cart-content{
+    position: fixed;
+    width: 80vw;
+    height: 80vh;
+    left: 10rem;
+    background-image: linear-gradient(#96D7C6, #BAC94A);
+    display: none;
+    text-align: center;
+}
+#minimize-cart{
+   cursor: pointer;
+   position: absolute;
+   right: 20px;
+}
+.titel-product{
+    text-align: left;
+}
+
+#Num-of-pd-type{
+    border-radius: 50%;
+    display: block;
+    height: 25px;
+    width: 25px;
+}
+

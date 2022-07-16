@@ -2,6 +2,16 @@ var api = "http://localhost:8080";
 
 // show data in home
 
+if (localStorage.getItem('num'))
+{
+    $("#Num-of-pd-type").html(localStorage.getItem('num'))
+    $("#Num-of-pd-type").css('background-color',"red")
+}else
+{
+    localStorage.setItem('num',0)
+}
+
+
 function ShowProduct(products)
 {
     let product = ""
@@ -32,45 +42,83 @@ function ShowProduct(products)
             });
     return product
 }
+function ShowCategory(data)
+{
+    let categoryList = `    <h3 id="category_title">Danh mục sản phẩm</h3>
+                                <div class="category_checkbox">
+                                <span>Tất cả sản phẩm</span>
+                                <input type="radio" name = "category" class='selectCategory' value = '0' checked>
+                                </div>`
+                                data['categoryList'].forEach(category => {
+                                categoryList+=`<div class="category_checkbox">
+                                    <span>${category['name']}</span>
+                                    <input type="radio" name = "category" class='selectCategory' value = '${category['id']}'>
+                                </div>`
+                                });
+            return categoryList
+}
+function ShowButtonProduct()
+{
+    // click khi mà chua nhấn vào category
+    $('.add-product-butt').click(function(){
+        $.ajax({
+            url: api+'/api/v1/order/add/product',
+            type: 'POST',
+            data:{
+                product_id:this.value
+            },
+            headers:{
+                "Authorization":`Bearer ${localStorage.getItem("token")}`,
+            },
+            success: function (data1) {
+                num = parseInt(localStorage.getItem('num'))+1
+                localStorage.setItem('num',num)
+                $("#Num-of-pd-type").html(num)
+                $("#Num-of-pd-type").css('background-color',"red")
+
+            },
+                
+            error: function (e1) {
+                alert("Error please check number of products")
+            }  
+        })});
+}
+
+
+
+
 
 
 $.ajax({
         url: api+'/api/v1/home',
         type: 'GET',
         dataType: 'json',
+        data:{
+            id:0,
+        },
         success: function (data) {
-            
-                let categoryList = `    <h3 id="category_title">Danh mục sản phẩm</h3>
-                                        <div class="category_checkbox">
-                                        <span>Tất cả sản phẩm</span>
-                                        <input type="radio" name = "category" class='selectCategory' value = '0' checked>
-                                    </div>`
-                data['categoryList'].forEach(category => {
-                    categoryList+=`<div class="category_checkbox">
-                                        <span>${category['name']}</span>
-                                        <input type="radio" name = "category" class='selectCategory' value = '${category['id']}'>
-                                </div>`
-                });
-                $(".category").html(categoryList);
 
-                
+                $(".category").html(ShowCategory(data));
                 let product = ShowProduct(data['products'])
                 $(".product").html(product)
 
                 // Lấy id của danh mục nếu click vào
                 
+                
                 $('.category_checkbox .selectCategory').click(function() {
                         // Lấy giá trị của thẻ đc check
                         $.ajax({
-                            url: api+'/api/v1/product/category/get',
+                            url: api+'/api/v1/home',
                             type: 'GET',
                             dataType: 'json',
                             data : {
-                                "Category_id":this.value
+                                id:this.value
                             },
                             success: function (data) {
-                                let product = ShowProduct(data)
+                                let product = ShowProduct(data['products'])
                                 $(".product").html(product)
+                                // Show button add and see detail
+                                ShowButtonProduct()
         
                             },
                             error: function (e) {
@@ -79,26 +127,46 @@ $.ajax({
                         }); 
                 });
                 
-              
+                ShowButtonProduct()
                 
-                $('.add-product-butt').click(function(){
+                // Tìm kiếm
+                $('.search').submit(function(e){
+                    e.preventDefault(e);
+                    let name = $('.pd-name').val()
+                    let categoryID = 0
+                    let len = $('.selectCategory').length
+                    for(let i=0;i<len;i++)
+                    {
+                        if ($('.selectCategory')[i]['checked'])
+                            categoryID  = $('.selectCategory')[i]['value']
+                    }
+
                     $.ajax({
-                        url: api+'/api/v1/order/add/product',
-                        type: 'POST',
+                        url: api+'/api/v1/product',
+                        type: 'GET',
                         data:{
-                            product_id:this.value
+                            name:name,
+                            categoryID:categoryID
                         },
                         headers:{
                             "Authorization":`Bearer ${localStorage.getItem("token")}`,
                         },
-                        success: function (data1) {
-                            alert("Success")
+                        success: function (data) {
+                            console.log(data)
+                            let product = ShowProduct(data)
+                            $(".product").html(product)
+                            ShowButtonProduct()
                         },
                             
                         error: function (e1) {
                             alert("Error please check number of products")
                         }  
-                    })});
+                    })
+                    
+                    
+                    
+
+                })
         },
 
         error: function (e) {
