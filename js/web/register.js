@@ -24,6 +24,4 @@ $(".register").submit(function(e){
         }  
     })
     
-    
-
 });

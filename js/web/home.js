@@ -1,5 +1,60 @@
 var api = "http://localhost:8080";
 
+
+// Kiểm tra xem nếu không phải người dùng thì sẽ không hiển thị login and register
+
+$.ajax({
+    url: api+'/authenticate/check/login',
+    type: 'GET',
+    headers:{
+        "Authorization":`Bearer ${localStorage.getItem("token")}`,
+    },
+    success: function (data1) {
+        //  , ẩn đăng nhập và login, hiển thị logout
+        $('.login-register').css('display','none');
+        
+        $('.logout').css('display','block');
+
+    },
+        
+    error: function (e1) {
+         //  hiển thị đăng nhập và login, ẩn logout
+        $('.login-register').css('display','block');
+        $('.logout').css('display','none');
+        
+    }  
+})
+// Ấn đăng xuất thì sẽ xoá token
+$(".logout").click(function(e){
+    e.preventDefault()
+    localStorage.removeItem("token")
+    location.reload();
+})
+// kiểm tra nếu là admin sẽ hiển thị link vào page ẩn link myorder
+$.ajax({
+    url: api+'/authenticate/check/admin',
+    type: 'GET',
+    headers:{
+        "Authorization":`Bearer ${localStorage.getItem("token")}`,
+    },
+    success: function (data) {
+        $('.admin-web').css('display','block');
+        $('.order-nav').css('display','none');
+    },
+        
+    error: function (e) {
+        $('.admin-web').css('display','none');
+        $('.order-nav').css('display','block');
+    }  
+})
+
+
+
+
+
+
+
+
 // show data in home
 
 if (localStorage.getItem('num'))
@@ -75,7 +130,6 @@ function ShowButtonProduct()
                 localStorage.setItem('num',num)
                 $("#Num-of-pd-type").html(num)
                 $("#Num-of-pd-type").css('background-color',"red")
-
             },
                 
             error: function (e1) {

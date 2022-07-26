@@ -1,4 +1,51 @@
 var api = "http://localhost:8080";
+
+
+// kiểm tra nếu là admin sẽ chuyển hương
+$.ajax({
+    url: api+'/authenticate/check/admin',
+    type: 'GET',
+    headers:{
+        "Authorization":`Bearer ${localStorage.getItem("token")}`,
+    },
+    success: function (data) {
+        window.location="http://127.0.0.1:8088/market/home.html";
+    },
+        
+    
+})
+
+
+
+$.ajax({
+    url: api+'/authenticate/check/login',
+    type: 'GET',
+    headers:{
+        "Authorization":`Bearer ${localStorage.getItem("token")}`,
+    },
+    success: function (data1) {
+        // đăng nhập rồi thì hiển thị myorder , ẩn đăng nhập và login, hiển thị logout
+        $('.login-register').css('display','none');
+        $('.logout').css('display','block');
+        // Show info of order
+        $("#Refresh").click()
+
+    },
+        
+    error: function (e1) {
+        //chưa đăng nhập sẽ chuyển hướng người dùng
+        window.location="http://127.0.0.1:8088/market/home.html";
+        
+    }  
+})
+// Ấn đăng xuất thì sẽ xoá token
+$(".logout").click(function(e){
+    e.preventDefault()
+    localStorage.removeItem("token")
+    location.reload();
+})
+
+
 function ShowOrderList(order)
 {
     order_list = ``
@@ -70,5 +117,3 @@ $("#Refresh").click(function(){
     })
 })
 
-// Show info of order
-$("#Refresh").click()

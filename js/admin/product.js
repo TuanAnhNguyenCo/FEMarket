@@ -95,7 +95,7 @@ $( "#Add_Product" ).click(function(){
                 });
           },
           error: function (e) {
-              console.log("Permission denied")
+              alert("Permission denied")
           }})
     });
 
