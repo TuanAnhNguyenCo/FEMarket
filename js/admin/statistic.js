@@ -85,8 +85,8 @@ function showProfitAndTop5SellingProducts()
                   <button type="submit" id="by-year" class="btn btn-outline-primary" >Tính theo năm</button>
                 </form>
                 <h4 class = 'profit-results'></h4>
-                <button type="submit" id="selling-product-button" class="btn btn-outline-primary" >Top 5 sản phẩm bán chạy</button>
-                <button type="submit" id="top-user-button" class="btn btn-outline-primary" >Top 5 người mua nhiều nhất</button>
+                <button id="selling-product-button" class="btn btn-outline-primary" >Top 5 sản phẩm bán chạy</button>
+                <button id="top-user-button" class="btn btn-outline-primary" >Top 5 người mua nhiều nhất</button>
               </div>`
 
   dateTime += `<div class = 'statistic-body'></div>`       
@@ -95,6 +95,7 @@ function showProfitAndTop5SellingProducts()
 
 function SellingProduct(status)
 {
+  let date = new Date($('#date-time').val());
   $.ajax({
     url: api+'/api/v1/order/statistic/product/top5',
     type: 'GET',
@@ -149,6 +150,8 @@ function SellingProduct(status)
 
 function Top5Customer(status)
 {
+  
+  let date = new Date($('#date-time').val());
   $.ajax({
     url: api+'/api/v1/order/statistic/customer/top5',
     type: 'GET',
@@ -163,6 +166,7 @@ function Top5Customer(status)
         status:status
     },
       success: function (data) {
+            
             // Hiển thị biểu đồ cột theo top 5 selling product
             var xValues = [];
             var yValues = [];
@@ -217,23 +221,15 @@ function CountProfitAjax(status)
             status:status
         },
         success: function (data) {
+        
           
           // Có data thì sẽ hiển thị lợi  nhuận
           $(".profit-results").html(`Lợi nhuận: ${data}`)
           // Hiển thị button sau khi chưa ấn vào tính theo ngày tháng năm
           $("#selling-product-button").css('display','inline-block')
           $("#top-user-button").css('display','inline-block')
-          // Hiển thị top 5 sản phẩm bán chạy nhất
-          $("#selling-product-button").click(function(){
-              SellingProduct(status)
-          })
-          $("#top-user-button").click(function(){
-              Top5Customer(status)
-        })
+          
 
-
-         
-        
         },
         error: function (e) {
             alert("Permission denied or Please check your time")
@@ -243,32 +239,48 @@ function CountProfitAjax(status)
 
 $("#get-profit").click(function(){
   
-  $(".body_content").html(showProfitAndTop5SellingProducts())
-  // Ẩn button khi chưa ấn vào tính theo ngày tháng năm
-  $("#selling-product-button").css('display','none')
-  $("#top-user-button").css('display','none')
-  // Khi ấn vào tính theo ngày
-  $('#by-day').click(function(e){
-    e.preventDefault()
-    $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo ngày`)
-    $("#top-user-button").html(`Top 5 người mua nhiều nhất theo ngày`)
-    CountProfitAjax('day')
-  })
-  // Khi ấn vào tính theo tháng
-  $('#by-month').click(function(e){
-    e.preventDefault()
-    $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo tháng`)
-    $("#top-user-button").html(`Top 5 người mua nhiều nhất theo tháng`)
-    CountProfitAjax('month')
-    
-  })
-  //Khi ấn vào tính theo năm
-  $('#by-year').click(function(e){
-    e.preventDefault()
-    $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo năm`)
-    $("#top-user-button").html(`Top 5 người mua nhiều nhất theo năm`)
-    CountProfitAjax('year')
-  })
+      $(".body_content").html(showProfitAndTop5SellingProducts())
+      // Ẩn button khi chưa ấn vào tính theo ngày tháng năm
+      $("#selling-product-button").css('display','none')
+      $("#top-user-button").css('display','none')
+      // Khi ấn vào tính theo ngày
+      var status = 'day'
+      $('#by-day').click(function(e){
+        e.preventDefault()
+        $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo ngày`)
+        $("#top-user-button").html(`Top 5 người mua nhiều nhất theo ngày`)
+        CountProfitAjax('day')
+        status = 'day'
+        
+        
+      })
+      // Khi ấn vào tính theo tháng
+      $('#by-month').click(function(e){
+        
+        e.preventDefault()
+        $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo tháng`)
+        $("#top-user-button").html(`Top 5 người mua nhiều nhất theo tháng`)
+        CountProfitAjax('month')
+        status = 'month'
+      })
+      //Khi ấn vào tính theo năm
+      $('#by-year').click(function(e){
+      
+        e.preventDefault()
+        $("#selling-product-button").html(`Top 5 sản phẩm bán chạy theo năm`)
+        $("#top-user-button").html(`Top 5 người mua nhiều nhất theo năm`)
+        CountProfitAjax('year')
+        status = 'year'
+      })
+      // Hiển thị top 5 sản phẩm bán chạy nhất
+      $("#selling-product-button").click(function(){
+        SellingProduct(status)
+      })
+     
+      // Hiển thị top 5 người mua nhiều nhất
+      $("#top-user-button").click(function(){
+        Top5Customer(status)
+    })
 
 })
 
