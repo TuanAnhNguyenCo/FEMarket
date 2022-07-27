@@ -89,7 +89,7 @@ function showProfitAndTop5SellingProducts()
                 <button type="submit" id="top-user-button" class="btn btn-outline-primary" >Top 5 người mua nhiều nhất</button>
               </div>`
 
-  dateTime += `<canvas id="selling-product-top-user" style="width:100%;"></canvas>`       
+  dateTime += `<div class = 'statistic-body'></div>`       
   return dateTime;
 }
 
@@ -117,7 +117,7 @@ function SellingProduct(status)
                 yValues.push(element['total'])
             });
             var barColors = ["red", "green","blue","orange","brown"];
-
+            $(".statistic-body").html(`<canvas id="selling-product-top-user" style="width:100%;"></canvas>`)
             new Chart("selling-product-top-user", {
               type: "bar",
               data: {
@@ -129,6 +129,12 @@ function SellingProduct(status)
               },
               options: {
                 legend: {display: false},
+                scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]},
                 title: {
                   display: true,
                   text: `Top 5 selling product by ${status}`
@@ -165,6 +171,7 @@ function Top5Customer(status)
                 yValues.push(element['total'])
             });
             var barColors = ["red", "green","blue","orange","brown"];
+            $(".statistic-body").html(`<canvas id="selling-product-top-user" style="width:100%;"></canvas>`)
             new Chart("selling-product-top-user", {
               type: "bar",
               data: {
@@ -176,6 +183,12 @@ function Top5Customer(status)
               },
               options: {
                 legend: {display: false},
+                scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]},
                 title: {
                   display: true,
                   text: `Top 5 customer by ${status}`
